@@ -1,7 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import UIOverlay from './UIOverlay'
 import SandPlane from './SandPlane'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 
@@ -39,7 +39,7 @@ export default function Scene() {
         }}
       >
         {/* Aquarium Lighting */}
-        <ambientLight intensity={1} color="#87ceeb" />
+        <ambientLight intensity={0.8} color="#87ceeb" />
         <directionalLight 
           position={[5, 10, 5]} 
           intensity={5} 
