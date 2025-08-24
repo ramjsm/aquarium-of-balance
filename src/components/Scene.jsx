@@ -4,13 +4,16 @@ import { OrbitControls } from '@react-three/drei'
 import AquariumSphere from './DistortionSphere'
 import UIOverlay from './UIOverlay'
 import EnvironmentController from './EnvironmentController'
-import useBreathTracking from '../hooks/useBreathTracking'
+import ModelLoadingScreen from './ModelLoadingScreen'
+import useBreathTrackingML from '../hooks/useBreathTrackingML'
 
 import { ENVIRONMENT_PRESETS } from './EnvironmentController'
+// Import test functions for development
+import '../ml/test-model.js'
 
 export default function Scene() {
   const [currentEnvironment, setCurrentEnvironment] = useState(ENVIRONMENT_PRESETS[0])
-  const breathData = useBreathTracking()
+  const breathData = useBreathTrackingML()
 
   const handleEnvironmentChange = (environment) => {
     setCurrentEnvironment(environment)
@@ -18,6 +21,13 @@ export default function Scene() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', background: 'linear-gradient(180deg, #001122 0%, #003344 50%, #004466 100%)' }}>
+      {/* Model Loading Screen Overlay */}
+      <ModelLoadingScreen 
+        modelStatus={breathData.modelStatus}
+        error={breathData.error}
+        onRetry={breathData.retrainModel}
+      />
+      
       <Canvas
         camera={{
           position: [0, 0, 4],
