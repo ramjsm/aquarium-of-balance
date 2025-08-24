@@ -46,9 +46,9 @@ export default function SandPlane() {
         displacementMap={displacementMap}
         normalMap={normalMap}
         roughnessMap={roughnessMap}
-        rippleStrength={0.2}
+        rippleStrength={0.5}
         rippleFrequency={1.5}
-        rippleSpeed={0.6}
+        rippleSpeed={0.5}
         textureRepeat={[repeatValue, repeatValue]}
       />
     </mesh>

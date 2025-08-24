@@ -9,7 +9,7 @@ export default function UIOverlay({ screen, setScreen }) {
   const handleEnterClick = () => {
     // Animate glass overlay sliding down
     gsap.to(glassOverlayRef.current, {
-      y: '-105vh',
+      y: '-62vh',
       duration: 1.5,
       ease: 'power3.inOut',
       onComplete: () => setScreen('exp')
@@ -51,7 +51,7 @@ export default function UIOverlay({ screen, setScreen }) {
       { screen === 'exp' && (<>
         <div className="absolute left-10 top-10 z-1 opacity-80">
           <h1 className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Your breath stirs the stillness</h1>
-          <p className='whitespace-pre-wrap mix-blend-overlay'>
+          <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
             Enable microphone and breathe to interact
           </p>          
         </div>
@@ -65,10 +65,10 @@ export default function UIOverlay({ screen, setScreen }) {
       {/* Glass Overlay */}
           <div 
             ref={glassOverlayRef}
-            className='glass-overlay absolute top-[50%] left-0 w-full h-2/3 pointer-events-none -translate-y-1/2'
+            className='glass-overlay absolute top-[50%] left-0 w-full h-1/2 pointer-events-none -translate-y-1/2'
             style={{
               background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-              backdropFilter: 'blur(2px)',
+              backdropFilter: 'blur(0px)',
               borderBottom: '1px solid rgba(255,255,255,0.2)',
               boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
               transform: 'translateY(0%)' // Set initial transform
