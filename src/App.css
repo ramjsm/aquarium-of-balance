@@ -19,6 +19,42 @@
   --font-satoshi: 'Satoshi', 'san-serif';
 }
 
+@layer base {
+  html {
+    font-size: 13px;
+  }
+
+  @media (min-width: theme('screens.sm')) {
+    html {
+      font-size: 14px; /* Small screens: 640px+ */
+    }
+  }
+
+  @media (min-width: theme('screens.md')) {
+    html {
+      font-size: 14px; /* Medium screens: 768px+ (Tailwind default) */
+    }
+  }
+
+  @media (min-width: theme('screens.lg')) {
+    html {
+      font-size: 16px; /* Large screens: 1024px+ */
+    }
+  }
+
+  @media (min-width: theme('screens.xl')) {
+    html {
+      font-size: 18px; /* Extra large: 1280px+ */
+    }
+  }
+
+  @media (min-width: theme('screens.2xl')) {
+    html {
+      font-size: 18px; /* 2XL screens: 1536px+ */
+    }
+  }
+}
+
 #root {
   width: 100vw;
   height: 100vh;
@@ -30,4 +66,27 @@
   font-style: italic;
   background-color: rgb(255, 255, 255);
   letter-spacing: -0.05em;
+}
+
+/* Prevent overflow during animations */
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow: hidden;
+}
+
+/* Ensure smooth animations */
+* {
+  box-sizing: border-box;
+}
+
+/* Glass overlay specific styles for better performance */
+.glass-overlay {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }

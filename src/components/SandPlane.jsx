@@ -1,5 +1,12 @@
 import { useTexture } from '@react-three/drei'
-import { DoubleSide, RepeatWrapping } from 'three'
+import { RepeatWrapping } from 'three'
+import RippleSandMaterial from './RippleSandMaterial'
+
+// Preload textures
+useTexture.preload('/textures/sand/sand.png')
+useTexture.preload('/textures/sand/sand01_Displacement.jpg')
+useTexture.preload('/textures/sand/sand01_Normal.jpg')
+useTexture.preload('/textures/sand/sand01_Roughness.jpg')
 
 export default function SandPlane() {
   // Load the sand textures
@@ -15,36 +22,34 @@ export default function SandPlane() {
     '/textures/sand/sand01_Roughness.jpg',
   ])
   
-  // Set texture wrapping and repeat for tiling
+  // Set texture wrapping (repeat is handled in shader)
   colorMap.wrapS = colorMap.wrapT = RepeatWrapping
   displacementMap.wrapS = displacementMap.wrapT = RepeatWrapping
   normalMap.wrapS = normalMap.wrapT = RepeatWrapping
   roughnessMap.wrapS = roughnessMap.wrapT = RepeatWrapping
   
-  // Repeat the texture for better coverage
-  const repeatValue = 5
-  colorMap.repeat.set(repeatValue, repeatValue)
-  displacementMap.repeat.set(repeatValue, repeatValue)
-  normalMap.repeat.set(repeatValue, repeatValue)
-  roughnessMap.repeat.set(repeatValue, repeatValue)
+  // Texture repeat value - HIGHER numbers = smaller texture (more zoomed out)
+  // Examples: 2 = big texture, 8 = small texture, 12 = very small texture  
+  const repeatValue = 4
   
   return (
     <mesh
       position={[0, 0, -5]} // Position behind other objects
       rotation={[0, 0, 0]} // Face the camera directly
     >
-      {/* Create a large plane geometry with enough segments for displacement */}
-      <planeGeometry args={[20, 20, 32]} />
+      {/* Create a large plane geometry with enough segments for ripple effects */}
+      <planeGeometry args={[12, 12, 128, 128]} />
       
-      {/* Apply sand texture material with proper maps */}
-      <meshStandardMaterial
-        map={colorMap}
+      {/* Apply custom ripple sand material */}
+      <RippleSandMaterial
+        colorMap={colorMap}
         displacementMap={displacementMap}
-        displacementScale={0.1} // Adjust this value to control displacement intensity
         normalMap={normalMap}
         roughnessMap={roughnessMap}
-        roughness={0.8} // Base roughness value
-        side={DoubleSide}
+        rippleStrength={0.2}
+        rippleFrequency={1.5}
+        rippleSpeed={0.6}
+        textureRepeat={[repeatValue, repeatValue]}
       />
     </mesh>
   )
