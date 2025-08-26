@@ -38,10 +38,10 @@ export default function SandPlane() {
       rotation={[0, 0, 0]} // Face the camera directly
     >
       {/* Create a large plane geometry with enough segments for ripple effects */}
-      <planeGeometry args={[12, 12, 128, 128]} />
+      <planeGeometry args={[12, 12, 32, 32]} />
       
       {/* Apply custom ripple sand material */}
-      <RippleSandMaterial
+      <meshStandardMaterial
         colorMap={colorMap}
         displacementMap={displacementMap}
         normalMap={normalMap}

@@ -129,7 +129,7 @@ export default function UIOverlay({ screen, setScreen }) {
         <div className="absolute left-10 lg:right-10 bottom-5 opacity-80">
           <div className="flex flex-col justify-start lg:flex-row lg:gap-4 lg:items-end gap-1">
             <a href="https://www.ramsessalas.com/" target="_blank" rel="noopener noreferrer">Interaction Design / Ramses Salas</a>
-            <a href="https://soundcloud.com/lefleuve" target="_blank" rel="noopener noreferrer">Sound Design / Thibauth Bournazac</a>
+            <a href="https://soundcloud.com/lefleuve" target="_blank" rel="noopener noreferrer">Sound Design / Thibaut Bournazac</a>
           </div>
         </div>
       </>)}
@@ -139,7 +139,7 @@ export default function UIOverlay({ screen, setScreen }) {
         className='glass-overlay absolute top-[50%] left-0 w-full h-1/2 pointer-events-none -translate-y-1/2'
         style={{
           background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-          backdropFilter: 'blur(0px)',
+          backdropFilter: 'blur(2px)',
           borderBottom: '1px solid rgba(255,255,255,0.2)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
           transform: 'translateY(0%)' // Set initial transform

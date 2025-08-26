@@ -4,6 +4,8 @@ import SandPlane from './SandPlane'
 import { useState, useRef } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
+import { Koi } from './Koi'
+import { OrbitControls } from '@react-three/drei'
 
 export default function Scene() {
   const [screen, setScreen] = useState('intro')
@@ -39,15 +41,21 @@ export default function Scene() {
         }}
       >
         {/* Aquarium Lighting */}
-        <ambientLight intensity={0.8} color="#87ceeb" />
+        <ambientLight intensity={0.5} color="#87ceeb" />
         <directionalLight 
           position={[5, 10, 5]} 
-          intensity={5} 
+          intensity={3} 
           castShadow 
         />
         
         {/* Sand Plane Background */}
         <SandPlane />
+
+        <OrbitControls />
+        
+        {/* Two Koi fish with circular motion - 180 degrees offset */}
+        <Koi offset={0} radius={1.8} speed={0.5} />
+        <Koi offset={Math.PI} radius={1.8} speed={0.5} />
         
         {/* Aquarium Sphere */}
         {/* <AquariumSphere breathData={breathData} /> */}
