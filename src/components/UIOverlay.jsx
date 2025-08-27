@@ -88,7 +88,7 @@ export default function UIOverlay({ screen, setScreen }) {
         onCanPlayThrough={() => setIsAudioLoaded(true)}
         onError={(e) => console.error('Audio loading error:', e)}
       >
-        <source src="/sound/harmony.mp3" type="audio/mpeg" />
+        <source src="/sound/ACQUARIUM_ZEN_final-bounce.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
 

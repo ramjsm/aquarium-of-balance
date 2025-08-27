@@ -1,5 +1,5 @@
 import { useTexture } from '@react-three/drei'
-import { RepeatWrapping } from 'three'
+import { CircleGeometry, RepeatWrapping } from 'three'
 import RippleSandMaterial from './RippleSandMaterial'
 
 // Preload textures
@@ -8,7 +8,7 @@ useTexture.preload('/textures/sand/sand01_Displacement.jpg')
 useTexture.preload('/textures/sand/sand01_Normal.jpg')
 useTexture.preload('/textures/sand/sand01_Roughness.jpg')
 
-export default function SandPlane() {
+export default function SandPlane({ position }) {
   // Load the sand textures
   const [
     colorMap,
@@ -34,11 +34,12 @@ export default function SandPlane() {
   
   return (
     <mesh
-      position={[0, 0, -5]} // Position behind other objects
-      rotation={[0, 0, 0]} // Face the camera directly
+      position={position} // Position behind other objects
+      rotation={[-Math.PI / 2, 0, 0]} // Face the camera directly
+      receiveShadow
     >
       {/* Create a large plane geometry with enough segments for ripple effects */}
-      <planeGeometry args={[12, 12, 32, 32]} />
+      <circleGeometry args={[12, 256]} />
       
       {/* Apply custom ripple sand material */}
       <meshStandardMaterial
@@ -46,10 +47,6 @@ export default function SandPlane() {
         displacementMap={displacementMap}
         normalMap={normalMap}
         roughnessMap={roughnessMap}
-        rippleStrength={0.5}
-        rippleFrequency={1.5}
-        rippleSpeed={0.5}
-        textureRepeat={[repeatValue, repeatValue]}
       />
     </mesh>
   )
