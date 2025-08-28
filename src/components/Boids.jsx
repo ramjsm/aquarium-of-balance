@@ -22,6 +22,7 @@ const BoidsComponent = ({
     boundaries,
     breathData
 }) => {
+  const previousIntensityRef = useRef(null)
   const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
     "General Setting",
     {
@@ -149,8 +150,11 @@ const BoidsComponent = ({
         boid.wander += Math.PI;
       }
 
+      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 30, 1), 1.5);
+      previousIntensityRef.current = intensity
+
       limits.normalize()
-      limits.multiplyScalar(75)
+      limits.multiplyScalar(intensity * 75)
 
       let totalCohesion = 0;
 
@@ -213,21 +217,11 @@ const BoidsComponent = ({
       steering.clampLength(0, MAX_STEERING * delta);
       boid.velocity.add(steering);
 
-      // TODO: CHECK MORE
-      if(breathData.getBreathIntensity() > 0.7) {
-        boid.velocity.multiplyScalar(1.2)
-        boid.velocity.clampLength(
-        0, 
-        10 * 
-        delta
-        );
-      } else {
-        boid.velocity.clampLength(
-        0, 
-        THREE.MathUtils.mapLinear(boid.scale, MIN_SCALE, MAX_SCALE, MAX_SPEED, MIN_SPEED) * 
-        delta
-        );
-      }
+      boid.velocity.clampLength(
+      0, 
+      THREE.MathUtils.mapLinear(boid.scale, MIN_SCALE, MAX_SCALE, (MAX_SPEED * intensity), (MIN_SPEED * intensity)) *
+      delta
+      );
 
       // APPLY VELOCITY
       boid.position.add(boid.velocity)
@@ -251,6 +245,7 @@ const BoidsComponent = ({
         avoidRadius={AVOID_RADIUS / boid.scale}
         cohesionCircle={COHESION_CIRCLE}
         cohesionRadius={COHESION_RADIUS / boid.scale}
+        breathData={breathData}
       />
   ))
 };
@@ -268,7 +263,7 @@ function arePropsEqual(prevProps, nextProps) {
 // Memoized export to prevent re-renders when breath data changes
 export const Boids = memo(BoidsComponent, arePropsEqual)
 
-const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius,  ...props }) => {
+const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius, breathData, ...props }) => {
   const { scene, animations } = useGLTF(`/models/${model}.glb`);
   const [koiWhiteTexture, koiBlackTexture] = useTexture([
     '/textures/sand/koi_white_edited.png',
@@ -309,6 +304,8 @@ const Boid = ({ position, model, animation, velocity, type, wanderCircle, wander
     group.current.quaternion.slerp(target.quaternion, 0.05)
     
     group.current.position.copy(position)
+
+    actions[animation].timeScale = Math.max(breathData.getBreathIntensity() * 5, 1)
   })
 
   return (

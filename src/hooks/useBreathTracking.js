@@ -13,7 +13,7 @@ export default function useBreathTracking() {
   const animationFrameRef = useRef(null)
   
   // Breathing detection parameters
-  const smoothingFactorRef = useRef(0.6) // Less smoothing for more responsive detection
+  const smoothingFactorRef = useRef(0.9) // Less smoothing for more responsive detection
   const breathIntensityRef = useRef(0) // Store current breath intensity without triggering re-renders
   const debugFrameCountRef = useRef(0) // For debug logging
   
