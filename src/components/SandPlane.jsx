@@ -39,7 +39,7 @@ export default function SandPlane({ position }) {
       receiveShadow
     >
       {/* Create a large plane geometry with enough segments for ripple effects */}
-      <circleGeometry args={[12, 256]} />
+      <planeGeometry args={[50, 50, 128, 128]} />
       
       {/* Apply custom ripple sand material */}
       <meshStandardMaterial

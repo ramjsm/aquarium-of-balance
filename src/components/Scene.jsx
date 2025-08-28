@@ -53,7 +53,7 @@ const AquariumCanvas = memo(({ animationMode, responsiveBoundaries, boundaries, 
         shadow-camera-near={0.1}
       />
       <color attach="background" args={[background]} />
-      {/* <fog attach="fog" args={["#909090", 19, 20]} /> */}
+      <fog attach="fog" args={[background, 8, 20]} />
 
       {/* Boundaries */}
       <mesh visible={boundaries.debug}>
@@ -92,7 +92,7 @@ export default function Scene() {
 );
 
 const { background } = useControls('Colors', {
-    background: '#96c3d1'
+    background: '#94c5f2'
   },
     { collapsed: true }
 );
