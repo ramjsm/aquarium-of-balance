@@ -1,4 +1,4 @@
-import { useAnimations, useGLTF } from "@react-three/drei";
+import { useAnimations, useGLTF, useTexture } from "@react-three/drei";
 
 // import { useAtom } from "jotai";
 import { useEffect, useMemo, useRef, memo } from "react";
@@ -25,11 +25,11 @@ const BoidsComponent = ({
   const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
     "General Setting",
     {
-        NB_BOIDS: { value: 20, min: 1, max: 200 },
+        NB_BOIDS: { value: 40, min: 1, max: 200 },
         MIN_SCALE: { value: 0.7, min: 0.1, max: 2, step: 0.1 },
-        MAX_SCALE: { value: 1.3, min: 0.1, max: 2, step: 0.1 },
-        MIN_SPEED: { value: 0.9, min: 0, max: 10, step: 0.1 },
-        MAX_SPEED: { value: 3.6, min: 0, max: 10, step: 0.1 },
+        MAX_SCALE: { value: 1.1, min: 0.1, max: 2, step: 0.1 },
+        MIN_SPEED: { value: 0.5, min: 0, max: 10, step: 0.1 },
+        MAX_SPEED: { value: 2.0, min: 0, max: 10, step: 0.1 },
         MAX_STEERING: { value: 0.05, min: 0, max: 1, step: 0.01 },
     },
     { collapsed: true }
@@ -89,7 +89,7 @@ const BoidsComponent = ({
 
   const boids = useMemo(() => {   
     return new Array(NB_BOIDS).fill().map((_, i) => ({
-        model: 'white_koi',
+        model: 'Koi_01',
         position: new Vector3(
             randFloat(-boundaries.x / 2, boundaries.x / 2),
             randFloat(-boundaries.y / 2, boundaries.y / 2),
@@ -97,7 +97,8 @@ const BoidsComponent = ({
         ),
         velocity: new Vector3(0, 0, 0),
         wander: randFloat(0, Math.PI * 2),
-        scale: randFloat(MIN_SCALE, MAX_SCALE)
+        scale: randFloat(MIN_SCALE, MAX_SCALE),
+        textureType: i % 2 === 0 ? 'white' : 'black' // Alternate between white and black
     }))
   }, [NB_BOIDS, boundaries, MIN_SCALE, MAX_SCALE])
 
@@ -244,6 +245,7 @@ const BoidsComponent = ({
         scale={boid.scale}
         velocity={boid.velocity}
         animation={"Fish_Armature|Swimming_Fast"}
+        textureType={boid.textureType}
         wanderCircle={WANDER_CIRCLE}
         wanderRadius={WANDER_RADIUS / boid.scale}
         alignCircle={ALIGN_CIRCLE}
@@ -269,8 +271,14 @@ function arePropsEqual(prevProps, nextProps) {
 // Memoized export to prevent re-renders when breath data changes
 export const Boids = memo(BoidsComponent, arePropsEqual)
 
-const Boid = ({ position, model, animation, velocity, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius,  ...props }) => {
+const Boid = ({ position, model, animation, velocity, textureType, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius,  ...props }) => {
   const { scene, animations } = useGLTF(`/models/${model}.glb`);
+  const [koiWhiteTexture, koiBlackTexture] = useTexture([
+    '/textures/sand/koi_white_edited.png',
+    '/textures/sand/koi_black_edited.png'
+  ]);
+  koiWhiteTexture.flipY = false
+  koiBlackTexture.flipY = false
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
   const group = useRef();
   const { actions } = useAnimations(animations, group);
@@ -279,9 +287,17 @@ const Boid = ({ position, model, animation, velocity, wanderCircle, wanderRadius
     clone.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
+        // Apply the appropriate koi texture based on textureType
+        if (child.material) {
+          console.log('Applying texture:', textureType, 'to boid');
+          // Clone the material to avoid sharing between instances
+          child.material = child.material.clone();
+          child.material.map = textureType === 'white' ? koiWhiteTexture : koiBlackTexture;
+          child.material.needsUpdate = true;
+        }
       }
     });
-  }, [clone]);
+  }, [clone, koiWhiteTexture, koiBlackTexture, textureType]);
 
   useEffect(() => {
     actions[animation]?.play()

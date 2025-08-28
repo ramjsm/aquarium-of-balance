@@ -92,7 +92,7 @@ export default function Scene() {
 );
 
 const { background } = useControls('Colors', {
-    background: '#3ba2c1'
+    background: '#96c3d1'
   },
     { collapsed: true }
 );
