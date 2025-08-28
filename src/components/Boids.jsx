@@ -25,7 +25,7 @@ const BoidsComponent = ({
   const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
     "General Setting",
     {
-        NB_BOIDS: { value: 40, min: 1, max: 200 },
+        NB_BOIDS: { value: 80, min: 1, max: 200 },
         MIN_SCALE: { value: 0.7, min: 0.1, max: 2, step: 0.1 },
         MAX_SCALE: { value: 1.1, min: 0.1, max: 2, step: 0.1 },
         MIN_SPEED: { value: 0.5, min: 0, max: 10, step: 0.1 },
@@ -59,8 +59,8 @@ const BoidsComponent = ({
     "Alignment",
     {
         ALIGN_CIRCLE: false,
-        ALIGN_RADIUS: { value: 1.2, min: 0, max: 10, step: 0.1 },
-        ALIGN_STRENGTH: { value: 4, min: 0, max: 10, step: 1 },
+        ALIGN_RADIUS: { value: 1.4, min: 0, max: 10, step: 0.1 },
+        ALIGN_STRENGTH: { value: 6, min: 0, max: 10, step: 1 },
     },
     { collapsed: true }
   )
@@ -70,7 +70,7 @@ const BoidsComponent = ({
     {
         AVOID_CIRCLE: false,
         AVOID_RADIUS: { value: 0.8, min: 0, max: 10, step: 0.1 },
-        AVOID_STRENGTH: { value: 10, min: 0, max: 10, step: 1 },
+        AVOID_STRENGTH: { value: 10, min: 0, max: 40, step: 1 },
     },
     { collapsed: true }
   )
@@ -79,8 +79,8 @@ const BoidsComponent = ({
     "Cohesion",
     {
         COHESION_CIRCLE: false,
-        COHESION_RADIUS: { value: 0.8, min: 0, max: 10, step: 0.1 },
-        COHESION_STRENGTH: { value: 1, min: 0, max: 10, step: 1 },
+        COHESION_RADIUS: { value: 2.1, min: 0, max: 10, step: 0.1 },
+        COHESION_STRENGTH: { value: 7, min: 0, max: 10, step: 1 },
     },
     { collapsed: true }
   )
@@ -98,7 +98,7 @@ const BoidsComponent = ({
         velocity: new Vector3(0, 0, 0),
         wander: randFloat(0, Math.PI * 2),
         scale: randFloat(MIN_SCALE, MAX_SCALE),
-        textureType: i % 2 === 0 ? 'white' : 'black' // Alternate between white and black
+        type: i % 2 === 0 ? 'white' : 'black' // Alternate between white and black
     }))
   }, [NB_BOIDS, boundaries, MIN_SCALE, MAX_SCALE])
 
@@ -163,7 +163,7 @@ const BoidsComponent = ({
 
         // ALIGNMENT
 
-        if(d > 0 && d < ALIGN_RADIUS) {
+        if((d > 0 && d < ALIGN_RADIUS) && boid.type === other.type) {
           const copy = other.velocity.clone()
           copy.normalize()
           copy.divideScalar(d)
@@ -175,10 +175,11 @@ const BoidsComponent = ({
           const diff = boid.position.clone().sub(other.position)
           diff.normalize()
           diff.divideScalar(d)
+          avoidance.add(diff)
         }
 
         // COHESION
-        if(d > 0 && d < COHESION_RADIUS) {
+        if((d > 0 && d < COHESION_RADIUS)  && boid.type === other.type) {
           cohesion.add(other.position)
           totalCohesion++;
         }
@@ -212,8 +213,6 @@ const BoidsComponent = ({
       steering.clampLength(0, MAX_STEERING * delta);
       boid.velocity.add(steering);
 
-      let speed = 0;
-
       // TODO: CHECK MORE
       if(breathData.getBreathIntensity() > 0.7) {
         boid.velocity.multiplyScalar(1.2)
@@ -229,8 +228,6 @@ const BoidsComponent = ({
         delta
         );
       }
-      
-      
 
       // APPLY VELOCITY
       boid.position.add(boid.velocity)
@@ -245,7 +242,7 @@ const BoidsComponent = ({
         scale={boid.scale}
         velocity={boid.velocity}
         animation={"Fish_Armature|Swimming_Fast"}
-        textureType={boid.textureType}
+        type={boid.type}
         wanderCircle={WANDER_CIRCLE}
         wanderRadius={WANDER_RADIUS / boid.scale}
         alignCircle={ALIGN_CIRCLE}
@@ -271,7 +268,7 @@ function arePropsEqual(prevProps, nextProps) {
 // Memoized export to prevent re-renders when breath data changes
 export const Boids = memo(BoidsComponent, arePropsEqual)
 
-const Boid = ({ position, model, animation, velocity, textureType, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius,  ...props }) => {
+const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius,  ...props }) => {
   const { scene, animations } = useGLTF(`/models/${model}.glb`);
   const [koiWhiteTexture, koiBlackTexture] = useTexture([
     '/textures/sand/koi_white_edited.png',
@@ -289,15 +286,14 @@ const Boid = ({ position, model, animation, velocity, textureType, wanderCircle,
         child.castShadow = true;
         // Apply the appropriate koi texture based on textureType
         if (child.material) {
-          console.log('Applying texture:', textureType, 'to boid');
           // Clone the material to avoid sharing between instances
           child.material = child.material.clone();
-          child.material.map = textureType === 'white' ? koiWhiteTexture : koiBlackTexture;
+          child.material.map = type === 'white' ? koiWhiteTexture : koiBlackTexture;
           child.material.needsUpdate = true;
         }
       }
     });
-  }, [clone, koiWhiteTexture, koiBlackTexture, textureType]);
+  }, [clone, koiWhiteTexture, koiBlackTexture, type]);
 
   useEffect(() => {
     actions[animation]?.play()

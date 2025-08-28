@@ -53,7 +53,7 @@ const AquariumCanvas = memo(({ animationMode, responsiveBoundaries, boundaries, 
         shadow-camera-near={0.1}
       />
       <color attach="background" args={[background]} />
-      {/* <fog attach="fog" args={["#000000", 12, 20]} /> */}
+      {/* <fog attach="fog" args={["#909090", 19, 20]} /> */}
 
       {/* Boundaries */}
       <mesh visible={boundaries.debug}>

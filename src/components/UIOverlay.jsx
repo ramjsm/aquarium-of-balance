@@ -156,7 +156,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         onCanPlayThrough={() => setIsAudioLoaded(true)}
         onError={(e) => console.error('Audio loading error:', e)}
       >
-        <source src="/sound/ACQUARIUM_ZEN_final-bounce.mp3" type="audio/mpeg" />
+        <source src="/sound/harmony_compressed.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
 
@@ -165,11 +165,11 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
           {/* Intro Content */}
           <div ref={introContentRef} className='absolute top-[50%] left-0 flex flex-col gap-2 w-full h-1/2 z-1 opacity-80 -translate-y-1/2'>
             <div className="mx-auto my-auto">
-              <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>Aquarium of Balance</h1>
+              <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>Fish School Is in Session</h1>
               <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
-                Behind the glass, silence rests. <br></br>
-                Here, light and shadow drift in harmony. <br></br>
-                With your breath, the stillness awakens. <br></br>
+                They’re learning to swim together and it’s a bit wobbly. <br></br>
+                They’ll need your help to find the perfect rhythm… <br></br>
+                But be careful, loud noises make them panic! <br></br>
               </p>
               <div className='mt-4'>
                 <button
@@ -180,7 +180,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
                     }`}
                   disabled={!isAudioLoaded}
                 >
-                  {isAudioLoaded ? 'Enter the still waters' : 'Loading harmony...'}
+                  {isAudioLoaded ? 'Start Swimming Lessons' : 'Loading harmony...'}
                 </button>
               </div>
             </div>
@@ -189,16 +189,16 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
       )}
       {screen === 'exp' && (<>
         <div className="absolute left-10 top-10 z-1 opacity-80">
-          <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Your breath stirs the stillness</h1>
+          <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Shhh… the fish are in class</h1>
           <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
-            Enable microphone and breathe to interact
+            Enable microphone to interact
           </p>
         </div>
         
         {/* Breath Intensity Visual Display */}
-        <div className="absolute lg:bottom-15 left-10 bottom-22 z-100 opacity-80">
+        <div className="absolute lg:bottom-8 left-10 bottom-22 z-100 opacity-80">
           <div className="white backdrop-blur-sm rounded-lg min-w-[200px]">
-            <h3 className="font-semibold text-xl mb-3 mix-blend-overlay">Breath Tracking</h3>
+            <h3 className="font-semibold text-xl mb-3 mix-blend-overlay">Noise Level</h3>
             
             {/* Microphone Status */}
             <div className="flex items-center gap-2 mb-3">
@@ -214,9 +214,9 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
             </div>
             
             {/* Breath Intensity Visualization */}
-            <div className="mb-2">
+            <div>
               <div ref={breathTextRef} className="mb-1 mix-blend-overlay">
-                Intensity: 0%
+                Noise: 0%
               </div>
               
               {/* Progress Bar */}
@@ -239,9 +239,9 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         </div>
         
         <div className="absolute left-10 lg:right-10 bottom-5 opacity-80">
-          <div className="flex flex-col justify-start lg:flex-row lg:gap-4 lg:items-end gap-1">
-            <a href="https://www.ramsessalas.com/" target="_blank" rel="noopener noreferrer">Interaction Design / Ramses Salas</a>
-            <a href="https://soundcloud.com/lefleuve" target="_blank" rel="noopener noreferrer">Sound Design / Thibaut Bournazac</a>
+          <div className="flex flex-col justify-start lg:justify-end lg:flex-row lg:gap-4 lg:items-end gap-1">
+            <a href="https://www.ramsessalas.com/" target="_blank" rel="noopener noreferrer">Interaction / Ramses Salas</a>
+            <a href="https://soundcloud.com/lefleuve" target="_blank" rel="noopener noreferrer">Sound / Thibaut Bournazac</a>
           </div>
         </div>
       </>)}
