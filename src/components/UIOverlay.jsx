@@ -5,7 +5,8 @@ import { SplitText } from 'gsap/SplitText'
 import AudioController from './AudioController'
 
 export default function UIOverlay({ screen, setScreen, breathData }) {
-  const glassOverlayRef = useRef(null)
+  const glassOverlayTopRef = useRef(null)
+  const glassOverlayBottomRef = useRef(null)
   const introContentRef = useRef(null)
   const [isAudioLoaded, setIsAudioLoaded] = useState(false)
   
@@ -114,9 +115,14 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         let { isMobile, isDesktop } = context.conditions;
 
         if(isMobile) {
-        gsap.to(glassOverlayRef.current, {
-                  top: '0',
-                  height: '23rem',
+        gsap.to(glassOverlayTopRef.current, {
+                  height: '9rem',
+                  duration: 1.5,
+                  ease: 'power3.inOut',
+                  onComplete: () => setScreen('exp')
+                })
+        gsap.to(glassOverlayBottomRef.current, {
+                  height: '13rem',
                   duration: 1.5,
                   ease: 'power3.inOut',
                   onComplete: () => setScreen('exp')
@@ -124,9 +130,14 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         }
 
         if(isDesktop) {
-            gsap.to(glassOverlayRef.current, {
-                  top: '0',
-                  height: '20rem',
+            gsap.to(glassOverlayTopRef.current, {
+                  height: '10rem',
+                  duration: 1.5,
+                  ease: 'power3.inOut',
+                  onComplete: () => setScreen('exp')
+                })
+            gsap.to(glassOverlayBottomRef.current, {
+                  height: '10rem',
                   duration: 1.5,
                   ease: 'power3.inOut',
                   onComplete: () => setScreen('exp')
@@ -230,7 +241,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
           </div>
         </div>
         
-        <div className="absolute left-10 lg:right-10 bottom-5 opacity-80">
+        <div className="absolute left-10 lg:right-10 bottom-5 opacity-80 z-100">
           <div className="flex flex-col justify-start lg:justify-end lg:flex-row lg:gap-4 lg:items-end gap-1">
             <a href="https://www.ramsessalas.com/" target="_blank" rel="noopener noreferrer">Interaction / Ramses Salas</a>
             <a href="https://soundcloud.com/lefleuve" target="_blank" rel="noopener noreferrer">Sound / Thibaut Bournazac</a>
@@ -239,8 +250,20 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
       </>)}
       {/* Glass Overlay */}
       <div
-        ref={glassOverlayRef}
-        className='glass-overlay absolute top-[50%] left-0 w-full h-1/2 pointer-events-none -translate-y-1/2'
+        ref={glassOverlayTopRef}
+        className='glass-overlay absolute top-0 left-0 w-full h-1/2 pointer-events-none'
+        style={{
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+          backdropFilter: 'blur(2px)',
+          borderBottom: '1px solid rgba(255,255,255,0.2)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+          transform: 'translateY(0%)' // Set initial transform
+        }}
+      />
+      {/* Glass Overlay */}
+      <div
+        ref={glassOverlayBottomRef}
+        className='glass-overlay-bottom absolute bottom-0 left-0 w-full h-1/2 pointer-events-none'
         style={{
           background: 'linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
           backdropFilter: 'blur(2px)',
