@@ -1,13 +1,21 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 
-export default function UIOverlay({ screen, setScreen }) {
+export default function UIOverlay({ screen, setScreen, breathData }) {
   const glassOverlayRef = useRef(null)
   const introContentRef = useRef(null)
   const audioRef = useRef(null)
   const [isAudioLoaded, setIsAudioLoaded] = useState(false)
+  
+  // Refs for breath visualization elements (updated without React re-renders)
+  const breathProgressRef = useRef(null)
+  const breathCircleRef = useRef(null)
+  const breathTextRef = useRef(null)
+  const breathPercentRef = useRef(null)
+  const animationFrameIdRef = useRef(null)
+  
   const { contextSafe } = useGSAP({ scope: introContentRef });
   const mm = gsap.matchMedia();
 
@@ -29,16 +37,76 @@ export default function UIOverlay({ screen, setScreen }) {
         },
       })
     })
-
   })
 
+  // Effect to handle breath visualization updates without React re-renders
+  useEffect(() => {
+    if (!breathData || !breathData.isListening) {
+      // Stop animation loop if not listening
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current)
+        animationFrameIdRef.current = null
+      }
+      return
+    }
+
+    // Start animation loop for breath visualization
+    const updateBreathVisuals = () => {
+      if (breathData.getBreathIntensity && screen === 'exp') {
+        const intensity = breathData.getBreathIntensity()
+        const percentage = Math.round(intensity * 100)
+        
+        // Update progress bar width directly
+        if (breathProgressRef.current) {
+          breathProgressRef.current.style.width = `${percentage}%`
+        }
+        
+        // Update circular progress
+        if (breathCircleRef.current) {
+          const dashLength = intensity * 176 // 176 is the circle circumference
+          breathCircleRef.current.style.strokeDasharray = `${dashLength} 176`
+        }
+        
+        // Update text displays
+        if (breathTextRef.current) {
+          breathTextRef.current.textContent = `Intensity: ${percentage}%`
+        }
+        
+        if (breathPercentRef.current) {
+          breathPercentRef.current.textContent = percentage
+        }
+      }
+      
+      animationFrameIdRef.current = requestAnimationFrame(updateBreathVisuals)
+    }
+    
+    updateBreathVisuals()
+    
+    // Cleanup animation frame on unmount or when listening stops
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current)
+      }
+    }
+  }, [breathData?.isListening, screen])
+
   const handleEnterClick = contextSafe(
-    () => {
+    async () => {
       // Play harmony audio
       if (audioRef.current) {
         audioRef.current.play().catch(error => {
           console.log('Audio autoplay prevented:', error)
         })
+      }
+
+      // Start breath tracking (request microphone access)
+      if (breathData && breathData.startListening) {
+        try {
+          await breathData.startListening()
+          console.log('Breath tracking started successfully')
+        } catch (error) {
+          console.error('Failed to start breath tracking:', error)
+        }
       }
 
       mm.add({
@@ -126,6 +194,50 @@ export default function UIOverlay({ screen, setScreen }) {
             Enable microphone and breathe to interact
           </p>
         </div>
+        
+        {/* Breath Intensity Visual Display */}
+        <div className="absolute lg:bottom-15 left-10 bottom-22 z-100 opacity-80">
+          <div className="white backdrop-blur-sm rounded-lg min-w-[200px]">
+            <h3 className="font-semibold text-xl mb-3 mix-blend-overlay">Breath Tracking</h3>
+            
+            {/* Microphone Status */}
+            <div className="flex items-center gap-2 mb-3">
+              <div className={`w-3 h-3 rounded-full ${
+                breathData?.isListening ? 'bg-green-400 animate-pulse' : 
+                breathData?.error ? 'bg-red-400' : 'bg-gray-400'
+              }`} />
+              <span className="mix-blend-overlay">
+                {breathData?.isListening ? 'Listening' : 
+                 breathData?.error ? 'Error' : 
+                 breathData?.permissionGranted ? 'Ready' : 'Not connected'}
+              </span>
+            </div>
+            
+            {/* Breath Intensity Visualization */}
+            <div className="mb-2">
+              <div ref={breathTextRef} className="mb-1 mix-blend-overlay">
+                Intensity: 0%
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="w-full h-2 bg-black/20 rounded-full overflow-hidden">
+                <div 
+                  ref={breathProgressRef}
+                  className="h-full bg-gradient-to-r from-blue-400 to-cyan-300 transition-all duration-75 ease-out"
+                  style={{ width: '0%' }}
+                />
+              </div>
+            </div>
+            
+            {/* Error Display */}
+            {breathData?.error && (
+              <div className="mt-2 text-red-300 text-xs mix-blend-overlay">
+                {breathData.error}
+              </div>
+            )}
+          </div>
+        </div>
+        
         <div className="absolute left-10 lg:right-10 bottom-5 opacity-80">
           <div className="flex flex-col justify-start lg:flex-row lg:gap-4 lg:items-end gap-1">
             <a href="https://www.ramsessalas.com/" target="_blank" rel="noopener noreferrer">Interaction Design / Ramses Salas</a>

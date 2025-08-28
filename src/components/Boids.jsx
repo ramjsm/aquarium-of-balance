@@ -1,7 +1,7 @@
 import { useAnimations, useGLTF } from "@react-three/drei";
 
 // import { useAtom } from "jotai";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, memo } from "react";
 import { Vector3 } from "three";
 import { SkeletonUtils } from "three-stdlib";
 // import { themeAtom, THEMES } from "./UI";
@@ -18,8 +18,9 @@ const alignment = new Vector3();
 const avoidance = new Vector3();
 const cohesion = new Vector3();
 
-export const Boids = ({
-    boundaries
+const BoidsComponent = ({
+    boundaries,
+    breathData
 }) => {
   const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
     "General Setting",
@@ -210,11 +211,25 @@ export const Boids = ({
       steering.clampLength(0, MAX_STEERING * delta);
       boid.velocity.add(steering);
 
-      boid.velocity.clampLength(
+      let speed = 0;
+
+      // TODO: CHECK MORE
+      if(breathData.getBreathIntensity() > 0.7) {
+        boid.velocity.multiplyScalar(1.2)
+        boid.velocity.clampLength(
+        0, 
+        10 * 
+        delta
+        );
+      } else {
+        boid.velocity.clampLength(
         0, 
         THREE.MathUtils.mapLinear(boid.scale, MIN_SCALE, MAX_SCALE, MAX_SPEED, MIN_SPEED) * 
         delta
-      );
+        );
+      }
+      
+      
 
       // APPLY VELOCITY
       boid.position.add(boid.velocity)
@@ -240,6 +255,19 @@ export const Boids = ({
       />
   ))
 };
+
+// Custom comparison function for React.memo
+function arePropsEqual(prevProps, nextProps) {
+  // Only re-render if boundaries object properties actually changed
+  return (
+    prevProps.boundaries.x === nextProps.boundaries.x &&
+    prevProps.boundaries.y === nextProps.boundaries.y &&
+    prevProps.boundaries.z === nextProps.boundaries.z
+  )
+}
+
+// Memoized export to prevent re-renders when breath data changes
+export const Boids = memo(BoidsComponent, arePropsEqual)
 
 const Boid = ({ position, model, animation, velocity, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius,  ...props }) => {
   const { scene, animations } = useGLTF(`/models/${model}.glb`);
