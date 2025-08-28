@@ -125,6 +125,8 @@ export default function useBreathTracking() {
     // Continue the analysis loop
     animationFrameRef.current = requestAnimationFrame(analyzeBreath)
   }
+
+  const isNoisy = () => getBreathIntensity() > 0.7
   
   // Cleanup on unmount
   useEffect(() => {
@@ -140,6 +142,7 @@ export default function useBreathTracking() {
     permissionGranted,
     error,
     startListening,
-    stopListening
+    stopListening,
+    isNoisy
   }
 }

@@ -2,11 +2,11 @@ import { useRef, useState, useEffect } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
+import AudioController from './AudioController'
 
 export default function UIOverlay({ screen, setScreen, breathData }) {
   const glassOverlayRef = useRef(null)
   const introContentRef = useRef(null)
-  const audioRef = useRef(null)
   const [isAudioLoaded, setIsAudioLoaded] = useState(false)
   
   // Refs for breath visualization elements (updated without React re-renders)
@@ -92,11 +92,9 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
 
   const handleEnterClick = contextSafe(
     async () => {
-      // Play harmony audio
-      if (audioRef.current) {
-        audioRef.current.play().catch(error => {
-          console.log('Audio autoplay prevented:', error)
-        })
+      // Play both audio tracks via global audio controller
+      if (window.audioController) {
+        await window.audioController.play()
       }
 
       // Start breath tracking (request microphone access)
@@ -148,17 +146,11 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
 
   return (
     <>
-      {/* Hidden audio element for harmony.mp3 */}
-      <audio
-        ref={audioRef}
-        preload="auto"
-        loop
-        onCanPlayThrough={() => setIsAudioLoaded(true)}
-        onError={(e) => console.error('Audio loading error:', e)}
-      >
-        <source src="/sound/harmony_compressed.mp3" type="audio/mpeg" />
-        Your browser does not support the audio element.
-      </audio>
+      {/* Audio Controller for both harmony and chaos tracks */}
+      <AudioController 
+        breathData={breathData} 
+        onAudioReady={setIsAudioLoaded} 
+      />
 
       {screen === 'intro' && (
         <div className='absolute top-0 left-0 w-screen h-screen overflow-hidden'>
@@ -180,7 +172,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
                     }`}
                   disabled={!isAudioLoaded}
                 >
-                  {isAudioLoaded ? 'Start Swimming Lessons' : 'Loading harmony...'}
+                  {isAudioLoaded ? 'Start Swimming Lessons' : 'Loading audio tracks...'}
                 </button>
               </div>
             </div>
@@ -198,7 +190,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         {/* Breath Intensity Visual Display */}
         <div className="absolute lg:bottom-8 left-10 bottom-22 z-100 opacity-80">
           <div className="white backdrop-blur-sm rounded-lg min-w-[200px]">
-            <h3 className="font-semibold text-xl mb-3 mix-blend-overlay">Noise Level</h3>
+            <h3 className="font-semibold text-xl mb-0 mix-blend-overlay">Noise Indicator</h3>
             
             {/* Microphone Status */}
             <div className="flex items-center gap-2 mb-3">
