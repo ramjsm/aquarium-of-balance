@@ -68,7 +68,7 @@ const AquariumCanvas = memo(({ animationMode, responsiveBoundaries, boundaries, 
       <Boids boundaries={responsiveBoundaries} breathData={breathData} />
       
       {/* UI Overlay with Environment Controls and Breath Control */}
-      <OrbitControls />
+      <OrbitControls maxPolarAngle={Math.PI / 2} />
     </Canvas>
   )
 })
@@ -85,7 +85,7 @@ export default function Scene() {
    const boundaries = useControls('Boundaries', {
     debug: false,
     x: { value: 20, min: 0, max: 40 },
-    y: { value: 3.6, min: 0, max: 40 },
+    y: { value: 5, min: 0, max: 40 },
     z: { value: 20, min: 0, max: 40 },
     },
     { collapsed: true }

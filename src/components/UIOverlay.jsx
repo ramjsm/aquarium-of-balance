@@ -166,13 +166,13 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
       {screen === 'intro' && (
         <div className='absolute top-0 left-0 w-screen h-screen overflow-hidden'>
           {/* Intro Content */}
-          <div ref={introContentRef} className='absolute top-[50%] left-0 flex flex-col gap-2 w-full h-1/2 z-1 opacity-80 -translate-y-1/2'>
-            <div className="mx-auto my-auto">
-              <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>Fish School Is in Session</h1>
+          <div ref={introContentRef} className='absolute top-[50%] left-10 flex flex-col gap-2 w-full h-1/2 z-1 opacity-80'>
+            <div className="my-auto">
+              <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>Fish School Season</h1>
               <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
                 They’re learning to swim together and it’s a bit wobbly. <br></br>
                 They’ll need your help to find the perfect rhythm… <br></br>
-                But be careful, loud noises make them panic! <br></br>
+                But be careful, they are quite sensible to loud noises. <br></br>
               </p>
               <div className='mt-4'>
                 <button
@@ -192,7 +192,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
       )}
       {screen === 'exp' && (<>
         <div className="absolute left-10 top-10 z-1 opacity-80">
-          <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Shhh… the fish are in class</h1>
+          <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Don’t Wake the School</h1>
           <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
             Enable microphone to interact
           </p>

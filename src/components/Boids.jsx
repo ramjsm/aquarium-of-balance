@@ -30,7 +30,7 @@ const BoidsComponent = ({
         MIN_SCALE: { value: 0.7, min: 0.1, max: 2, step: 0.1 },
         MAX_SCALE: { value: 1.1, min: 0.1, max: 2, step: 0.1 },
         MIN_SPEED: { value: 0.5, min: 0, max: 10, step: 0.1 },
-        MAX_SPEED: { value: 2.0, min: 0, max: 10, step: 0.1 },
+        MAX_SPEED: { value: 1.0, min: 0, max: 10, step: 0.1 },
         MAX_STEERING: { value: 0.05, min: 0, max: 1, step: 0.01 },
     },
     { collapsed: true }
@@ -150,11 +150,11 @@ const BoidsComponent = ({
         boid.wander += Math.PI;
       }
 
-      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 30, 1), 1.5);
+      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 30, 1), 0.75);
       previousIntensityRef.current = intensity
 
       limits.normalize()
-      limits.multiplyScalar(intensity * 75)
+      limits.multiplyScalar(intensity * 10)
 
       let totalCohesion = 0;
 
