@@ -23,7 +23,7 @@ const BoidsComponent = ({
     breathData
 }) => {
   const previousIntensityRef = useRef(null)
-  const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
+  const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING, DETECTION_RADIUS, SHOW_DETECTION_RADIUS } = useControls(
     "General Setting",
     {
         NB_BOIDS: { value: 80, min: 1, max: 200 },
@@ -32,11 +32,13 @@ const BoidsComponent = ({
         MIN_SPEED: { value: 0.5, min: 0, max: 10, step: 0.1 },
         MAX_SPEED: { value: 1.0, min: 0, max: 10, step: 0.1 },
         MAX_STEERING: { value: 0.05, min: 0, max: 1, step: 0.01 },
+        DETECTION_RADIUS: { value: 1, min: 1, max: 10 },
+        SHOW_DETECTION_RADIUS: { value: true }
     },
     { collapsed: true }
   )
 
-  const { threeD, ALIGNMENT, AVOIDANCE, COHESION } = useControls(
+  const { ALIGNMENT, AVOIDANCE, COHESION } = useControls(
     "Boid Rules",
     {
         ALIGNMENT: { value: true },
@@ -46,7 +48,7 @@ const BoidsComponent = ({
     { collapsed: true }
   )
 
-  const { WANDER_RADIUS, WANDER_STRENGTH, WANDER_CIRCLE } = useControls(
+  const { WANDER_CIRCLE, WANDER_STRENGTH, WANDER_RADIUS } = useControls(
     "Wander",
     {
         WANDER_RADIUS: { value: 1, min: 1, max: 10 },
@@ -56,7 +58,7 @@ const BoidsComponent = ({
     { collapsed: true }
   )
 
-  const { ALIGN_RADIUS, ALIGN_STRENGTH, ALIGN_CIRCLE  } = useControls(
+  const { ALIGN_STRENGTH  } = useControls(
     "Alignment",
     {
         ALIGN_CIRCLE: false,
@@ -66,7 +68,7 @@ const BoidsComponent = ({
     { collapsed: true }
   )
 
-    const { AVOID_RADIUS, AVOID_STRENGTH, AVOID_CIRCLE  } = useControls(
+    const { AVOID_STRENGTH  } = useControls(
     "Avoidance",
     {
         AVOID_CIRCLE: false,
@@ -76,7 +78,7 @@ const BoidsComponent = ({
     { collapsed: true }
   )
 
-    const { COHESION_RADIUS, COHESION_STRENGTH, COHESION_CIRCLE  } = useControls(
+    const { COHESION_STRENGTH  } = useControls(
     "Cohesion",
     {
         COHESION_CIRCLE: false,
@@ -150,7 +152,7 @@ const BoidsComponent = ({
         boid.wander += Math.PI;
       }
 
-      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 30, 1), 0.75);
+      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 20, 1), 0.75);
       previousIntensityRef.current = intensity
 
       limits.normalize()
@@ -167,7 +169,7 @@ const BoidsComponent = ({
 
         // ALIGNMENT
 
-        if((d > 0 && d < ALIGN_RADIUS) && boid.type === other.type) {
+        if((d > 0 && d < DETECTION_RADIUS) && boid.type === other.type) {
           const copy = other.velocity.clone()
           copy.normalize()
           copy.divideScalar(d)
@@ -175,7 +177,7 @@ const BoidsComponent = ({
         }
 
         // AVOID
-        if(d > 0 && d < AVOID_RADIUS) {
+        if(d > 0 && d < DETECTION_RADIUS) {
           const diff = boid.position.clone().sub(other.position)
           diff.normalize()
           diff.divideScalar(d)
@@ -183,7 +185,7 @@ const BoidsComponent = ({
         }
 
         // COHESION
-        if((d > 0 && d < COHESION_RADIUS)  && boid.type === other.type) {
+        if((d > 0 && d < DETECTION_RADIUS)  && boid.type === other.type) {
           cohesion.add(other.position)
           totalCohesion++;
         }
@@ -239,12 +241,8 @@ const BoidsComponent = ({
         type={boid.type}
         wanderCircle={WANDER_CIRCLE}
         wanderRadius={WANDER_RADIUS / boid.scale}
-        alignCircle={ALIGN_CIRCLE}
-        alignRadius={ALIGN_RADIUS / boid.scale}
-        avoidCircle={AVOID_CIRCLE}
-        avoidRadius={AVOID_RADIUS / boid.scale}
-        cohesionCircle={COHESION_CIRCLE}
-        cohesionRadius={COHESION_RADIUS / boid.scale}
+        showDetectionRadius={SHOW_DETECTION_RADIUS}
+        detectionRadius={DETECTION_RADIUS / boid.scale}
         breathData={breathData}
       />
   ))
@@ -263,7 +261,7 @@ function arePropsEqual(prevProps, nextProps) {
 // Memoized export to prevent re-renders when breath data changes
 export const Boids = memo(BoidsComponent, arePropsEqual)
 
-const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, alignCircle, alignRadius, avoidCircle, avoidRadius, cohesionCircle, cohesionRadius, breathData, ...props }) => {
+const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, showDetectionRadius, detectionRadius, breathData, ...props }) => {
   const { scene, animations } = useGLTF(`/models/${model}.glb`);
   const [koiWhiteTexture, koiBlackTexture] = useTexture([
     '/textures/sand/koi_white_edited.png',
@@ -315,17 +313,9 @@ const Boid = ({ position, model, animation, velocity, type, wanderCircle, wander
         <sphereGeometry args={[wanderRadius, 32]} />
         <meshStandardMaterial color="red" wireframe />
       </mesh>
-      <mesh visible={alignCircle}>
-        <sphereGeometry args={[alignRadius, 32]} />
-        <meshStandardMaterial color="green" wireframe />
-      </mesh>
-      <mesh visible={avoidCircle}>
-        <sphereGeometry args={[avoidRadius, 32]} />
-        <meshStandardMaterial color="blue" wireframe />
-      </mesh>
-      <mesh visible={cohesionCircle}>
-        <sphereGeometry args={[cohesionRadius, 32]} />
-        <meshStandardMaterial color="yellow" wireframe />
+      <mesh visible={showDetectionRadius}>
+        <sphereGeometry args={[detectionRadius, 32]} />
+        <meshStandardMaterial color="gray" wireframe transparent opacity={0.025} />
       </mesh>
     </group>
   );
