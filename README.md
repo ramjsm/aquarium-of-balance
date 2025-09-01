@@ -4,7 +4,7 @@ A web visualization of Craig Reynolds' Boids algorithm with microphone interacti
 
 [**Live Demo**](https://schoolofbalance.netlify.app/)
 
-<img width="1709" height="1260" alt="image" src="https://github.com/user-attachments/assets/036511de-ab65-49b2-844d-600ae70a6561" />
+<img width="408" height="230" alt="the-school-of-balance" src="https://github.com/user-attachments/assets/b465fa05-c2b0-4031-a026-068dd3b4de52" />
 
 ## About
 
