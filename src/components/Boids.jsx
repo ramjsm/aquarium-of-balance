@@ -23,32 +23,28 @@ const BoidsComponent = ({
     breathData
 }) => {
   const previousIntensityRef = useRef(null)
-  const { NB_BOIDS, MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING, DETECTION_RADIUS, SHOW_DETECTION_RADIUS } = useControls(
+  const MIN_SCALE = 0.7
+  const MAX_SCALE =  1.1
+  const MIN_SPEED =  0.5
+  const MAX_SPEED = 1.0
+  const MAX_STEERING = 0.05
+ /*  const { MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
     "General Setting",
     {
-        NB_BOIDS: { value: 80, min: 1, max: 200 },
         MIN_SCALE: { value: 0.7, min: 0.1, max: 2, step: 0.1 },
         MAX_SCALE: { value: 1.1, min: 0.1, max: 2, step: 0.1 },
         MIN_SPEED: { value: 0.5, min: 0, max: 10, step: 0.1 },
         MAX_SPEED: { value: 1.0, min: 0, max: 10, step: 0.1 },
         MAX_STEERING: { value: 0.05, min: 0, max: 1, step: 0.01 },
-        DETECTION_RADIUS: { value: 1, min: 1, max: 10 },
-        SHOW_DETECTION_RADIUS: { value: true }
     },
     { collapsed: true }
-  )
+  ) */
 
-  const { ALIGNMENT, AVOIDANCE, COHESION } = useControls(
-    "Boid Rules",
-    {
-        ALIGNMENT: { value: true },
-        AVOIDANCE: { value: true },
-        COHESION: { value: true }
-    },
-    { collapsed: true }
-  )
-
-  const { WANDER_CIRCLE, WANDER_STRENGTH, WANDER_RADIUS } = useControls(
+  // Wander settings - hardcoded (hidden from Leva)
+  const WANDER_RADIUS = 1
+  const WANDER_STRENGTH = 2
+  const WANDER_CIRCLE = false
+  /* const { WANDER_CIRCLE, WANDER_STRENGTH, WANDER_RADIUS } = useControls(
     "Wander",
     {
         WANDER_RADIUS: { value: 1, min: 1, max: 10 },
@@ -56,42 +52,25 @@ const BoidsComponent = ({
         WANDER_CIRCLE: false
     },
     { collapsed: true }
-  )
+  ) */
 
-  const { ALIGN_STRENGTH  } = useControls(
-    "Alignment",
-    {
-        ALIGN_CIRCLE: false,
-        ALIGN_RADIUS: { value: 1.4, min: 0, max: 10, step: 0.1 },
-        ALIGN_STRENGTH: { value: 6, min: 0, max: 10, step: 1 },
-    },
-    { collapsed: true }
-  )
+  const DisplayVisualRange = false
 
-    const { AVOID_STRENGTH  } = useControls(
-    "Avoidance",
+  const { Fishes, Alignment, Avoidance, Cohesion, VisualRange  } = useControls(
     {
-        AVOID_CIRCLE: false,
-        AVOID_RADIUS: { value: 0.8, min: 0, max: 10, step: 0.1 },
-        AVOID_STRENGTH: { value: 10, min: 0, max: 40, step: 1 },
+        Fishes: { value: 80, min: 1, max: 200 }, 
+        VisualRange: { value: 3, min: 1, max: 10 },
+        Alignment: { value: 0, min: 0, max: 10, step: 1 },
+        Avoidance: { value: 0, min: 0, max: 40, step: 1 },
+        Cohesion: { value: 0, min: 0, max: 10, step: 1 }
     },
-    { collapsed: true }
-  )
-
-    const { COHESION_STRENGTH  } = useControls(
-    "Cohesion",
-    {
-        COHESION_CIRCLE: false,
-        COHESION_RADIUS: { value: 2.1, min: 0, max: 10, step: 0.1 },
-        COHESION_STRENGTH: { value: 7, min: 0, max: 10, step: 1 },
-    },
-    { collapsed: true }
+    { collapsed: false }
   )
 
 
 
   const boids = useMemo(() => {   
-    return new Array(NB_BOIDS).fill().map((_, i) => ({
+    return new Array(Fishes).fill().map((_, i) => ({
         model: 'Koi_01',
         position: new Vector3(
             randFloat(-boundaries.x / 2, boundaries.x / 2),
@@ -103,7 +82,7 @@ const BoidsComponent = ({
         scale: randFloat(MIN_SCALE, MAX_SCALE),
         type: i % 2 === 0 ? 'white' : 'black' // Alternate between white and black
     }))
-  }, [NB_BOIDS, boundaries, MIN_SCALE, MAX_SCALE])
+  }, [Fishes, boundaries, MIN_SCALE, MAX_SCALE])
 
   useFrame((_, delta) => {
     for(let i = 0; i < boids.length; i++) {
@@ -169,7 +148,7 @@ const BoidsComponent = ({
 
         // ALIGNMENT
 
-        if((d > 0 && d < DETECTION_RADIUS) && boid.type === other.type) {
+        if((d > 0 && d < VisualRange) && boid.type === other.type) {
           const copy = other.velocity.clone()
           copy.normalize()
           copy.divideScalar(d)
@@ -177,7 +156,7 @@ const BoidsComponent = ({
         }
 
         // AVOID
-        if(d > 0 && d < DETECTION_RADIUS) {
+        if(d > 0 && d < VisualRange) {
           const diff = boid.position.clone().sub(other.position)
           diff.normalize()
           diff.divideScalar(d)
@@ -185,7 +164,7 @@ const BoidsComponent = ({
         }
 
         // COHESION
-        if((d > 0 && d < DETECTION_RADIUS)  && boid.type === other.type) {
+        if((d > 0 && d < VisualRange)  && boid.type === other.type) {
           cohesion.add(other.position)
           totalCohesion++;
         }
@@ -196,23 +175,23 @@ const BoidsComponent = ({
       steering.add(wander);
       steering.add(horizontalWander);
 
-      if(ALIGNMENT) {
+      if(Alignment > 0) {
         alignment.normalize();
-        alignment.multiplyScalar(ALIGN_STRENGTH)
+        alignment.multiplyScalar(Alignment)
         steering.add(alignment)
       }
 
-      if(AVOIDANCE) {
+      if(Avoidance > 0) {
         avoidance.normalize();
-        avoidance.multiplyScalar(AVOID_STRENGTH)
+        avoidance.multiplyScalar(Avoidance)
         steering.add(avoidance)
       }
 
-      if(COHESION && totalCohesion > 0) {
+      if(Cohesion > 0 && totalCohesion > 0) {
         cohesion.divideScalar(totalCohesion);
         cohesion.sub(boid.position);
         cohesion.normalize()
-        cohesion.multiplyScalar(COHESION_STRENGTH)
+        cohesion.multiplyScalar(Cohesion)
         steering.add(cohesion)
       }
 
@@ -241,8 +220,8 @@ const BoidsComponent = ({
         type={boid.type}
         wanderCircle={WANDER_CIRCLE}
         wanderRadius={WANDER_RADIUS / boid.scale}
-        showDetectionRadius={SHOW_DETECTION_RADIUS}
-        detectionRadius={DETECTION_RADIUS / boid.scale}
+        showVisualRange={DisplayVisualRange}
+        visualRange={VisualRange / boid.scale}
         breathData={breathData}
       />
   ))
@@ -261,7 +240,7 @@ function arePropsEqual(prevProps, nextProps) {
 // Memoized export to prevent re-renders when breath data changes
 export const Boids = memo(BoidsComponent, arePropsEqual)
 
-const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, showDetectionRadius, detectionRadius, breathData, ...props }) => {
+const Boid = ({ position, model, animation, velocity, type, wanderCircle, wanderRadius, showVisualRange, visualRange, breathData, ...props }) => {
   const { scene, animations } = useGLTF(`/models/${model}.glb`);
   const [koiWhiteTexture, koiBlackTexture] = useTexture([
     '/textures/sand/koi_white_edited.png',
@@ -313,8 +292,8 @@ const Boid = ({ position, model, animation, velocity, type, wanderCircle, wander
         <sphereGeometry args={[wanderRadius, 32]} />
         <meshStandardMaterial color="red" wireframe />
       </mesh>
-      <mesh visible={showDetectionRadius}>
-        <sphereGeometry args={[detectionRadius, 32]} />
+      <mesh visible={showVisualRange}>
+        <sphereGeometry args={[visualRange, 32]} />
         <meshStandardMaterial color="gray" wireframe transparent opacity={0.025} />
       </mesh>
     </group>

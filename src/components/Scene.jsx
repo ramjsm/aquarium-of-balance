@@ -4,15 +4,14 @@ import SandPlane from './SandPlane'
 import { useState, useRef, useEffect, useMemo, memo } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { KoiSchool } from './KoiSchool'
-import { Leva, useControls } from 'leva'
+import { Leva } from 'leva'
 import { DoubleSide } from 'three'
 import { Boids } from './Boids'
 import { Environment, OrbitControls, SoftShadows } from '@react-three/drei'
 import useBreathTracking from '../hooks/useBreathTracking'
 
 // Separate memoized component for the 3D Canvas to prevent re-renders from breath tracking
-const AquariumCanvas = memo(({ animationMode, responsiveBoundaries, boundaries, background, breathData }) => {
+const AquariumCanvas = memo(({ responsiveBoundaries, boundaries, background, breathData }) => {
   return (
     <Canvas
       camera={{
@@ -82,20 +81,21 @@ export default function Scene() {
   const breathData = useBreathTracking()
   const scaleX = Math.max(0.5, size[0] / 1920)
   const scaleY = Math.max(0.5, size[1] / 1080)
-   const boundaries = useControls('Boundaries', {
+  const boundaries = {
+    debug: false,
+    x: 20,
+    y: 5,
+    z: 20
+  }
+  /* const boundaries = useControls('Boundaries', {
     debug: false,
     x: { value: 20, min: 0, max: 40 },
     y: { value: 5, min: 0, max: 40 },
     z: { value: 20, min: 0, max: 40 },
     },
-    { collapsed: true }
-);
+    { collapsed: true, visible: false, hidden: true }
+); */
 
-const { background } = useControls('Colors', {
-    background: '#94c5f2'
-  },
-    { collapsed: true }
-);
   // Memoize responsiveBoundaries to prevent unnecessary re-renders
   const responsiveBoundaries = useMemo(() => ({
     x: boundaries.x * scaleX,
@@ -118,22 +118,6 @@ useEffect(() => {
   return () => window.removeEventListener("resize", updateSize);
 })
 
-  // Keyboard controls for switching animation modes
-  useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.key === 'h' || event.key === 'H') {
-        setAnimationMode('harmonious')
-        console.log('Animation mode: Harmonious')
-      } else if (event.key === 'c' || event.key === 'C') {
-        setAnimationMode('chaotic')
-        console.log('Animation mode: Chaotic')
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyPress)
-    return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [])
-
   useGSAP(() => {
     gsap.fromTo(containerRef.current,
         { opacity: 0 },
@@ -148,13 +132,44 @@ useEffect(() => {
         animationMode={animationMode}
         responsiveBoundaries={responsiveBoundaries}
         boundaries={boundaries}
-        background={background}
+        background='#94c5f2'
         breathData={breathData}
       />
       
       {/* UI Overlay - will re-render for breath data updates */}
       <UIOverlay screen={screen} setScreen={setScreen} breathData={breathData} />
-      <Leva collapsed />
+      
+      <Leva
+        position
+        theme={{ 
+          colors: {  
+            elevation1: 'rgba(0,0,0,0)',
+            elevation2: 'rgba(0,0,0,0)',
+            elevation3: 'rgba(0,0,0,0)',
+            accent2: '#60a5fa',
+            accent1: '#60a5fa',
+            accent3: '#60a5fa',
+            folderWidgetColor: '#60a5fa',
+            folderTextColor: 'black',
+            toolTipText: 'red'
+          },
+          fontSizes: {
+            root: '0.9rem'
+          },
+          sizes: {
+            rootWidth: '328px'
+          },
+          shadows: {
+              level1: '0px',
+          }
+        }}
+          titleBar={{
+            title: 'Controls',
+            filter: false,
+          }}
+          hideCopyButton={true}
+          hidden={screen === 'intro'}
+        />
     </div>
   )
 }

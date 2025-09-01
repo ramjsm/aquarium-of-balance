@@ -194,7 +194,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         <div className="absolute left-10 top-10 z-1 opacity-80">
           <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Don’t Wake the School</h1>
           <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
-            Enable microphone to interact
+            Enable microphone to interact / Use Controls to change their behavior
           </p>
         </div>
         
