@@ -154,17 +154,17 @@ useEffect(() => {
             toolTipText: 'red'
           },
           fontSizes: {
-            root: '0.9rem'
+            // root: '0.9rem'
           },
           sizes: {
-            rootWidth: '328px'
+            // rootWidth: '328px'
           },
           shadows: {
               level1: '0px',
           }
         }}
           titleBar={{
-            title: 'Controls',
+            title: 'Behavior',
             filter: false,
           }}
           hideCopyButton={true}

@@ -26,7 +26,7 @@ const BoidsComponent = ({
   const MIN_SCALE = 0.7
   const MAX_SCALE =  1.1
   const MIN_SPEED =  0.5
-  const MAX_SPEED = 1.0
+  const MAX_SPEED = 1.5
   const MAX_STEERING = 0.05
  /*  const { MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
     "General Setting",
@@ -59,14 +59,13 @@ const BoidsComponent = ({
   const { Fishes, Alignment, Avoidance, Cohesion, VisualRange  } = useControls(
     {
         Fishes: { value: 80, min: 1, max: 200 }, 
-        VisualRange: { value: 3, min: 1, max: 10 },
+        VisualRange: { value: 5, min: 1, max: 10 },
         Alignment: { value: 0, min: 0, max: 10, step: 1 },
         Avoidance: { value: 0, min: 0, max: 40, step: 1 },
         Cohesion: { value: 0, min: 0, max: 10, step: 1 }
     },
     { collapsed: false }
   )
-
 
 
   const boids = useMemo(() => {   
@@ -131,7 +130,7 @@ const BoidsComponent = ({
         boid.wander += Math.PI;
       }
 
-      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 20, 1), 0.75);
+      const intensity = THREE.MathUtils.lerp(previousIntensityRef.current, Math.max(breathData.getBreathIntensity() * 25, 1), 0.75);
       previousIntensityRef.current = intensity
 
       limits.normalize()

@@ -116,7 +116,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
 
         if(isMobile) {
         gsap.to(glassOverlayTopRef.current, {
-                  height: '9rem',
+                  height: '11rem',
                   duration: 1.5,
                   ease: 'power3.inOut',
                   onComplete: () => setScreen('exp')
@@ -168,11 +168,12 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
           {/* Intro Content */}
           <div ref={introContentRef} className='absolute top-[50%] left-10 flex flex-col gap-2 w-full h-1/2 z-1 opacity-80'>
             <div className="my-auto">
-              <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>Fish School Season</h1>
+              <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>The School of Balance</h1>
               <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
-                They’re learning to swim together and it’s a bit wobbly. <br></br>
-                They’ll need your help to find the perfect rhythm… <br></br>
-                But be careful, they are quite sensible to loud noises. <br></br>
+                A school of fish drifts inside the tank. <br></br>
+                They’re learning how to swim together in balance, <br></br>
+                but every ripple of noise scatters them apart. <br></br>
+                Want to take charge of the class? <br></br>
               </p>
               <div className='mt-4'>
                 <button
@@ -183,7 +184,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
                     }`}
                   disabled={!isAudioLoaded}
                 >
-                  {isAudioLoaded ? 'Start Swimming Lessons' : 'Loading audio tracks...'}
+                  {isAudioLoaded ? 'Begin the Lesson' : 'Loading audio tracks...'}
                 </button>
               </div>
             </div>
@@ -192,9 +193,9 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
       )}
       {screen === 'exp' && (<>
         <div className="absolute left-10 top-10 z-1 opacity-80">
-          <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Don’t Wake the School</h1>
-          <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
-            Enable microphone to interact / Use Controls to change their behavior
+          <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Guide the School</h1>
+          <p className='mt-2 whitespace-pre-wrap mix-blend-overlay lg:w-full w-[80%]'>
+            <strong>Enable microphone</strong> and use the <strong>Behavior Panel</strong> to adjust how the school learns to swim.
           </p>
         </div>
         
