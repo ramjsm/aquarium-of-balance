@@ -59,10 +59,10 @@ const BoidsComponent = ({
   const { Fishes, Alignment, Avoidance, Cohesion, VisualRange  } = useControls(
     {
         Fishes: { value: 80, min: 1, max: 200 }, 
-        VisualRange: { value: 5, min: 1, max: 10 },
+        VisualRange: { value: 2, min: 1, max: 10 },
         Alignment: { value: 0, min: 0, max: 20, step: 1 },
+        Cohesion: { value: 0, min: 0, max: 20, step: 1 },
         Avoidance: { value: 0, min: 0, max: 20, step: 1 },
-        Cohesion: { value: 0, min: 0, max: 20, step: 1 }
     },
     { collapsed: false }
   )
