@@ -2,8 +2,6 @@
 
 A web visualization of Craig Reynolds' Boids algorithm with microphone interaction and dynamic audio. Virtual fish swim together following flocking rules, but scatter when they detect noise from your microphone, creating a dynamic relationship between sound, movement, and collective behavior.
 
-<img width="1708" height="1261" alt="image" src="https://github.com/user-attachments/assets/ca2f0f61-8fc0-4298-90a3-6a5b7aa1f6ad" />
-
 <img width="1709" height="1260" alt="image" src="https://github.com/user-attachments/assets/036511de-ab65-49b2-844d-600ae70a6561" />
 
 [**Live Demo**](https://schoolofbalance.netlify.app/)
@@ -17,7 +15,7 @@ The project explores the relationship between noise and harmony through two inte
 - **Visual**: Fish react to microphone input by scattering when they detect noise
 - **Audio**: An immersive soundscape that responds dynamically to both the fish behavior and environmental audio input
 
-It's an exploration of how external disturbances can disrupt collective harmony, and how that disruption can be transformed into a meditative audiovisual experience.
+It's an exploration of how external disturbances can disrupt collective harmony, and how that disruption can be transformed into a meditative visualization experience.
 
 ### What it does
 
@@ -50,7 +48,7 @@ It's an exploration of how external disturbances can disrupt collective harmony,
 
 ### Visual System
 
-The simulation follows Craig Reynolds' three simple rules:
+The simulation follows Craig Reynolds' three core rules:
 
 1. **Separation**: Avoid crowding nearby fish
 2. **Alignment**: Swim in the same direction as nearby fish
@@ -58,6 +56,7 @@ The simulation follows Craig Reynolds' three simple rules:
 
 Additional behaviors:
 
+- **Species Cohesion**: Prefer to stay close to and align with fish of the same species
 - **Wander**: Random movement for natural-looking motion
 - **Boundary Avoidance**: Turn away from aquarium walls
 - **Noise Response**: Scatter when microphone detects sound
@@ -88,15 +87,9 @@ src/
 
 ## 📚 Resources & Credits
 
-### Algorithm & Theory
-
 - **Craig Reynolds' Boids Algorithm**: [red3d.com/cwr/boids](https://www.red3d.com/cwr/boids/)
 - **R3F Boids Implementation Tutorial and 3D Model**: [YouTube - Boids Flocking Simulation](https://www.youtube.com/watch?v=WepzbxlYROs)
-
-### Audio & Design
-
-- **Sound**: [Thibaut Bournazac](https://soundcloud.com/lefleuve)
-- **Interaction & Development**: [Ramses Salas](https://www.ramsessalas.com/)
+- **Sound Design**: [Thibaut Bournazac](https://soundcloud.com/lefleuve)
 
 ---
 
