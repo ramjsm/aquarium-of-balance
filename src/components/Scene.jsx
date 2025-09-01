@@ -138,38 +138,40 @@ useEffect(() => {
       
       {/* UI Overlay - will re-render for breath data updates */}
       <UIOverlay screen={screen} setScreen={setScreen} breathData={breathData} />
-      
-      <Leva
-        position
-        theme={{ 
-          colors: {  
-            elevation1: 'rgba(0,0,0,0)',
-            elevation2: 'rgba(0,0,0,0)',
-            elevation3: 'rgba(0,0,0,0)',
-            accent2: '#60a5fa',
-            accent1: '#60a5fa',
-            accent3: '#60a5fa',
-            folderWidgetColor: '#60a5fa',
-            folderTextColor: 'black',
-            toolTipText: 'red'
-          },
-          fontSizes: {
-            // root: '0.9rem'
-          },
-          sizes: {
-            // rootWidth: '328px'
-          },
-          shadows: {
-              level1: '0px',
-          }
-        }}
-          titleBar={{
-            title: 'Behavior',
-            filter: false,
+      <div className='absolute top-[12rem] lg:top-[11rem] lg:left-8 left-5'>
+
+        <Leva
+          fill
+          theme={{ 
+            colors: {  
+              elevation1: 'rgba(0,0,0,0)',
+              elevation2: 'rgba(0,0,0,0)',
+              elevation3: 'rgba(0,0,0,0)',
+              accent2: '#60a5fa',
+              accent1: '#67e8f9',
+              accent3: '#67e8f9',
+              folderWidgetColor: '#60a5fa',
+              folderTextColor: 'rgba(0,0,0,0.8)',
+              toolTipText: 'rgba(0,0,0,0.8)',
+              highlight1: 'rgba(0,0,0,0.8)',
+              highlight2: 'rgba(0,0,0,0.8)',
+              highlight3: 'rgba(0,0,0,0.8)'
+            },
+            fontSizes: {
+              // root: '0.9rem'
+            },
+            shadows: {
+                level1: '0px',
+            }
           }}
-          hideCopyButton={true}
-          hidden={screen === 'intro'}
-        />
+            titleBar={{
+              title: 'Behavior',
+              filter: false,
+            }}
+            hideCopyButton={true}
+            hidden={screen === 'intro'}
+          />
+      </div>
     </div>
   )
 }
