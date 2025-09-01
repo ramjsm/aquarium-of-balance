@@ -2,6 +2,8 @@
 
 A web visualization of Craig Reynolds' Boids algorithm with microphone interaction and dynamic audio. Virtual fish swim together following flocking rules, but scatter when they detect noise from your microphone, creating a dynamic relationship between sound, movement, and collective behavior.
 
+<img width="1708" height="1261" alt="image" src="https://github.com/user-attachments/assets/ca2f0f61-8fc0-4298-90a3-6a5b7aa1f6ad" />
+
 <img width="1709" height="1260" alt="image" src="https://github.com/user-attachments/assets/036511de-ab65-49b2-844d-600ae70a6561" />
 
 [**Live Demo**](https://schoolofbalance.netlify.app/)
