@@ -24,8 +24,8 @@ const BoidsComponent = ({
 }) => {
   const previousIntensityRef = useRef(null)
   const MIN_SCALE = 0.7
-  const MAX_SCALE =  1.1
-  const MIN_SPEED =  0.5
+  const MAX_SCALE =  1.8
+  const MIN_SPEED =  0.7
   const MAX_SPEED = 1.5
   const MAX_STEERING = 0.05
  /*  const { MIN_SCALE, MAX_SCALE, MIN_SPEED , MAX_SPEED, MAX_STEERING } = useControls(
@@ -60,9 +60,9 @@ const BoidsComponent = ({
     {
         Fishes: { value: 80, min: 1, max: 200 }, 
         VisualRange: { value: 5, min: 1, max: 10 },
-        Alignment: { value: 0, min: 0, max: 10, step: 1 },
-        Avoidance: { value: 0, min: 0, max: 40, step: 1 },
-        Cohesion: { value: 0, min: 0, max: 10, step: 1 }
+        Alignment: { value: 0, min: 0, max: 20, step: 1 },
+        Avoidance: { value: 0, min: 0, max: 20, step: 1 },
+        Cohesion: { value: 0, min: 0, max: 20, step: 1 }
     },
     { collapsed: false }
   )

@@ -170,10 +170,10 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
             <div className="my-auto">
               <h1 id="intro-header" className='font-black text-3xl -tracking-[0.07rem] mix-blend-overlay'>The School of Balance</h1>
               <p className='mt-2 whitespace-pre-wrap mix-blend-overlay'>
-                A school of fish drifts inside the tank. <br></br>
-                They’re learning how to swim together in balance, <br></br>
+                Light and darkness drift inside the tank<br></br>
+                They’re learning how to move together in harmony, <br></br>
                 but every ripple of noise scatters them apart. <br></br>
-                Want to take charge of the class? <br></br>
+                Guide them and help them return to rhythm. <br></br>
               </p>
               <div className='mt-4'>
                 <button
@@ -184,7 +184,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
                     }`}
                   disabled={!isAudioLoaded}
                 >
-                  {isAudioLoaded ? 'Begin the Lesson' : 'Loading audio tracks...'}
+                  {isAudioLoaded ? 'Enter the Waters' : 'Loading audio tracks...'}
                 </button>
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function UIOverlay({ screen, setScreen, breathData }) {
         <div className="absolute left-10 top-10 z-1 opacity-80">
           <h1 id="exp-header" className='font-black text-4xl -tracking-[0.07rem] mix-blend-overlay'>Guide the School</h1>
           <p className='mt-2 whitespace-pre-wrap mix-blend-overlay lg:w-full w-[80%]'>
-            <strong>Enable microphone</strong> and use the <strong>Behavior Panel</strong> to adjust how the school learns to swim.
+            Enable the <strong>microphone</strong>, then use the <strong>Behavior Panel</strong> to adjust how the school swims.
           </p>
         </div>
         

@@ -84,7 +84,7 @@ export default function Scene() {
   const boundaries = {
     debug: false,
     x: 20,
-    y: 5,
+    y: 10,
     z: 20
   }
   /* const boundaries = useControls('Boundaries', {
@@ -157,11 +157,18 @@ useEffect(() => {
               highlight2: 'rgba(0,0,0,0.8)',
               highlight3: 'rgba(0,0,0,0.8)'
             },
+            fonts: {
+              mono: "'Satoshi', 'SF Mono', Monaco, 'Inconsolata', 'Roboto Mono', monospace",
+              sans: "'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+            },
             fontSizes: {
-              // root: '0.9rem'
+              root: '0.9rem'
+            },
+            sizes:{
+              // numberInputMinWidth: '80px;'
             },
             shadows: {
-                level1: '0px',
+               level1: '0px',
             }
           }}
             titleBar={{

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
 export default function useBreathTracking() {
-  // Only state that should trigger re-renders (status changes)
   const [isListening, setIsListening] = useState(false)
   const [permissionGranted, setPermissionGranted] = useState(false)
   const [error, setError] = useState(null)
@@ -125,8 +124,6 @@ export default function useBreathTracking() {
     // Continue the analysis loop
     animationFrameRef.current = requestAnimationFrame(analyzeBreath)
   }
-
-  const isNoisy = () => getBreathIntensity() > 0.7
   
   // Cleanup on unmount
   useEffect(() => {
@@ -142,7 +139,6 @@ export default function useBreathTracking() {
     permissionGranted,
     error,
     startListening,
-    stopListening,
-    isNoisy
+    stopListening
   }
 }
