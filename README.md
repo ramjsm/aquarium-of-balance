@@ -1,6 +1,6 @@
 # The School of Balance
 
-A web visualization of Craig Reynolds' Boids algorithm with microphone interaction. Virtual fish swim together following flocking rules, but scatter when they detect noise from your microphone.
+A web visualization of Craig Reynolds' Boids algorithm with microphone interaction and dynamic audio. Virtual fish swim together following flocking rules, but scatter when they detect noise from your microphone, creating a dynamic relationship between sound, movement, and collective behavior.
 
 [**Live Demo**](https://schoolofbalance.netlify.app/)
 
@@ -8,15 +8,20 @@ A web visualization of Craig Reynolds' Boids algorithm with microphone interacti
 
 This is a visualization of the [Boids algorithm](https://www.red3d.com/cwr/boids/) that Craig Reynolds created in 1986. The simulation shows a school of koi fish following the three basic flocking rules: separation, alignment, and cohesion.
 
-The twist here is that the fish react to microphone input - when they hear noise, they scatter apart, breaking their peaceful schooling behavior. It's a simple exploration of how external disturbances can disrupt collective harmony.
+The project explores the relationship between noise and harmony through two interconnected systems:
+
+- **Visual**: Fish react to microphone input by scattering when they detect noise
+- **Audio**: An immersive soundscape that responds dynamically to both the fish behavior and environmental audio input
+
+It's an exploration of how external disturbances can disrupt collective harmony, and how that disruption can be transformed into a meditative audiovisual experience.
 
 ### What it does
 
 - Implements Craig Reynolds' Boids flocking algorithm
 - Fish scatter when they detect microphone noise
-- Includes real-time parameter controls
-- Works on desktop and mobile
-- Has some ambient audio
+- Features an immersive soundscape that responds to fish behavior
+- Sound manipulation based on noise levels and collective fish movement
+- Real-time parameter controls for both visual and audio elements
 
 ## 🛠️ Technology Stack
 
@@ -31,12 +36,15 @@ The twist here is that the fish react to microphone input - when they hear noise
 ## How to Use
 
 1. Open [schoolofbalance.netlify.app](https://schoolofbalance.netlify.app/)
-2. Allow microphone access when prompted
-3. Click "Start Swimming Lessons"
-4. The fish will swim peacefully until they hear noise from your microphone, then they'll scatter
-5. Use the "Behavior" control panel to adjust the algorithm parameters
+2. Allow microphone access when prompted (required for both visual and audio interaction)
+3. Click "Begin the Lesson" to begin the audiovisual experience
+4. **Visual Interaction**: The fish swim peacefully until they detect noise from your microphone, then they scatter
+5. **Audio Experience**: Listen as the soundscape responds to both the fish behavior and your environmental audio input
+6. Use the "Behavior" control panel to adjust algorithm parameters and explore different interactions
 
-## The Boids Algorithm
+## The Boids Algorithm & Sound Design
+
+### Visual System
 
 The simulation follows Craig Reynolds' three simple rules:
 
@@ -49,6 +57,15 @@ Additional behaviors:
 - **Wander**: Random movement for natural-looking motion
 - **Boundary Avoidance**: Turn away from aquarium walls
 - **Noise Response**: Scatter when microphone detects sound
+
+### Audio System
+
+The immersive soundscape operates on multiple layers:
+
+- **Environmental Response**: Audio processing that reacts to microphone input levels
+- **Behavioral Sonification**: Fish scattering and schooling behaviors influence the sound texture
+- **Dynamic Audio Tracks**: Real-time mixing between harmony and chaos audio based on collective fish behavior
+- **Ambient Soundscape**: Background audio that creates an underwater atmosphere
 
 ## 🔧 Project Structure
 
@@ -70,17 +87,13 @@ src/
 ### Algorithm & Theory
 
 - **Craig Reynolds' Boids Algorithm**: [red3d.com/cwr/boids](https://www.red3d.com/cwr/boids/)
-- **R3F Implementation Tutorial and 3D Model**: [YouTube - Boids Flocking Simulation](https://www.youtube.com/watch?v=WepzbxlYROs)
+- **R3F Boids Implementation Tutorial and 3D Model**: [YouTube - Boids Flocking Simulation](https://www.youtube.com/watch?v=WepzbxlYROs)
 
 ### Audio & Design
 
-- **Sound Design**: [Thibaut Bournazac](https://soundcloud.com/lefleuve)
-- **Interaction Design**: [Ramses Salas](https://www.ramsessalas.com/)
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **Sound**: [Thibaut Bournazac](https://soundcloud.com/lefleuve)
+- **Interaction & Development**: [Ramses Salas](https://www.ramsessalas.com/)
 
 ---
 
-_A simple exploration of flocking behavior and how noise can disrupt collective harmony._
+_An exploration of flocking behavior, dynamic audio, and the relationship between noise, harmony, and collective movement._
